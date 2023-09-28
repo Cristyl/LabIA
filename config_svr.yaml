@@ -6,24 +6,23 @@ method: grid
 metric:
   name: error_mae_val
   goal: minimize
-parameters:
-  n_bin_x:
-    values: [32, 64, 128]
-  n_bin_y:
-    values: [64, 128, 256]
-  cross:
-    values: ['none', 'thin', 'fat']
-  hsv:
-    values: ['True', 'False']
-  only_hog:
-    values: ['False']
-  hog_type:
-    values: ['image', 'channels']
-  pixels_per_cell:
-    values: ['None', [8,8], [16,16], [32,32]]
-  kernel:
-    values: ["linear", "poly", "rbf", "sigmoid"]
-  C:
-    values: [0.1, 1, 10]
-  epsilon:
-    values: [0.01, 0.1, 1.0]
+n_bin_x:
+  values: [32, 64, 128]
+n_bin_y:
+  values: [64, 128, 256]
+cross:
+  values: ['none', 'thin', 'fat']
+hsv:
+  values: ['True', 'False']
+only_hog:
+  values: ['False']
+hog_type:
+  values: ['image', 'channels']
+pixels_per_cell:
+  values: ['None', [8,8], [16,16], [32,32]]
+kernel:
+  values: ["linear", "poly", "rbf", "sigmoid"]
+C:
+  values: [0.1, 1, 10]
+epsilon:
+  values: [0.01, 0.1, 1.0]

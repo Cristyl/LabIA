@@ -19,7 +19,7 @@ np.random.seed(SEED)
 random.seed(SEED)
 torch.manual_seed(SEED)
 
-BRIXCOLOR_SPLIT = "MixedSeason_"
+BRIXCOLOR_SPLIT = "Season21ToSeason22Phone_"
 
 def apply_params_and_extract_features(config, images_tr, images_te):
     cross = None
@@ -40,6 +40,8 @@ def apply_params_and_extract_features(config, images_tr, images_te):
         kwargs['pixels_per_cell'] = config.pixels_per_cell
     else:
         kwargs['pixels_per_cell'] = None
+    print(config.n_bin_y)
+    print(config["n_bin_y"])
     X_tr = extractor.extract(images_tr, config.n_bin_y, config.n_bin_x, cross=cross, hsv=config.hsv,
                              hog_type=config.hog_type, only_hog=config.only_hog, **kwargs)
     X_te = extractor.extract(images_te, config.n_bin_y, config.n_bin_x, cross=cross, hsv=config.hsv,
@@ -54,7 +56,7 @@ def brixDataset():
     #dividi in training e validation
     sampler_tr, sampler_val, _, _ = train_test_split(
         list(range(len(dataset_tr))), dataset_tr.labels, test_size=0.2,
-        random_state=42,  stratify=dataset_tr.labels['brix'])
+        random_state=42)
 
     #carica i dati del training e le label
     dataloader_tr = DataLoader(dataset_tr, batch_size=1, shuffle=False, sampler=sampler_tr)
@@ -90,6 +92,7 @@ def brixDataset():
     #set wandb
     with open(Path("./config_svr.yaml")) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
+    wandb.login(key="86a812c5e52ce2215d34c29e91dcd07b2862456d")
     wandb.init(config=config)
     config = wandb.config
 
