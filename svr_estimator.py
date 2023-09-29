@@ -6,13 +6,14 @@ from PIL import Image
 from grapefeatureextractor import GrapeFeatureExtractor
 import yaml
 from sklearn.metrics import mean_squared_error
-from sweep_svr import svr_sweep
+from sklearn.svm import SVR
 
 BRIXCOLOR_SPLIT = "MixedSeason_"
-
+#modificare in generale il file per farlo più simile a brixextimator del prof
 class Brix_SVR():
     def __init__(self):
         self.X_te, self.y_te = self.brixDataset_test()
+        self.config = None
     
     def apply_params_and_extract_features(self, config, images_te):
         cross = None
@@ -40,7 +41,7 @@ class Brix_SVR():
     def brixDataset_test(self):
         #cambia il file config con quello della migliore run di wandb, in seguito riaddestra e evaluate
         with open(Path("./config_svr.yaml")) as file:
-            config = yaml.load(file, Loader=yaml.FullLoader)
+            self.config = yaml.load(file, Loader=yaml.FullLoader)
         
         dataset_te = BrixColorDataset(Path("./data"), std_split=BRIXCOLOR_SPLIT + "test")
 
@@ -51,16 +52,19 @@ class Brix_SVR():
             images_te.append(Image.fromarray(data.numpy().squeeze().transpose(1, 2, 0)))
             labels_te.append(target['brix'])
         
-        X_te, _ = self.apply_params_and_extract_features(config, images_te)
+        X_te, _ = self.apply_params_and_extract_features(self.config, images_te)
         y_te = labels_te
 
         return X_te, y_te
 
-    #def fit(self):
-        model.svr_sweep()
+    def fit(self):
+        #ricrea training set per poter ritreinare sui migliori iperparametri
+        model = SVR(kernel=self.config["kernel"], C=self.config["C"], epsilon=self.config["espilon"])
+        model.fit(self.X_tr, self.y_tr)
+        joblib.dump(model, Path("./saved_models_svr.joblib"))
 
     def predict(self):
-        model = joblib.load("./saved_models_svr")
+        model = joblib.load("./saved_models_svr.joblib")
         y_predicted = model.predict(self.X_te)
 
         return y_predicted
