@@ -22,7 +22,7 @@ parameters:
   pixels_per_cell:
     values: ['None', [8,8], [16,16], [32,32]]
   kernel:
-    values: ["linear", "poly", "rbf", "sigmoid"]
+    values: ["rbf"]
   C:
     values: [0.1, 1, 10]
   epsilon:

@@ -19,7 +19,7 @@ np.random.seed(SEED)
 random.seed(SEED)
 torch.manual_seed(SEED)
 
-BRIXCOLOR_SPLIT = "Season21ToSeason22Phone_"
+BRIXCOLOR_SPLIT = "MixedSeason_"
 
 def apply_params_and_extract_features(config, images_tr, images_te):
     cross = None

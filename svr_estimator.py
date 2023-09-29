@@ -38,7 +38,7 @@ class Brix_SVR():
         return X_te, cross
 
     def brixDataset_test(self):
-
+        #cambia il file config con quello della migliore run di wandb, in seguito riaddestra e evaluate
         with open(Path("./config_svr.yaml")) as file:
             config = yaml.load(file, Loader=yaml.FullLoader)
         
